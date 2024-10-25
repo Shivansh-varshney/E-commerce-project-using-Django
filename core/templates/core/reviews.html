@@ -1,0 +1,62 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+{% block title %}
+  Reviews: {{ product.title }}
+{% endblock %}
+
+{% block content %}
+  <!-- Breadcrumb Section Begin -->
+  <section class="breadcrumb-section set-bg" data-setbg="{% static 'core/img/breadcrumb.jpg' %}">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <div class="breadcrumb__text">
+            <h2>E commerce</h2>
+            <div class="breadcrumb__option">
+              <a href="{% url 'home' %}">Home</a>
+              <a href="{% url 'category_products' product.category.id %}">{{ product.category.title }}</a>
+              <a href="{% url 'product' product.id %}">{{ product.title }}</a>
+              <span>Reviews</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Breadcrumb Section End -->
+
+  <div class="container mt-5">
+    {% for review in page_obj %}
+      <div class="mb-2 border border-warning pt-3 px-3">
+        <span>
+          <strong>
+            {{ review.user.first_name|title }}
+            {% for star in review.rating|ljust:review.rating %}
+              ⭐
+            {% endfor %}
+          </strong>
+        </span>
+        <p>
+          {{ review.review }} <br /><small class="text-danger">{{ review.date }}</small>
+        </p>
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="text-center">
+    <span class="step-links">
+      {% if page_obj.has_previous %}
+        <a class="text-dark" href="?page={{ page_obj.previous_page_number }}"><-previous</a>
+      {% else %}
+        <a href="{% url 'product' product.id %}" class="text-dark"><-Back</a>
+      {% endif %}
+
+      <span class="current">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</span>
+
+      {% if page_obj.has_next %}
+        <a class="text-dark" href="?page={{ page_obj.next_page_number }}">next-></a>
+      {% endif %}
+    </span>
+  </div>
+{% endblock %}

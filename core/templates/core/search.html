@@ -1,0 +1,56 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+
+{% block title %}
+  Search: {{ query }}
+{% endblock %}
+
+{% block content %}
+  <!-- Breadcrumb Section Begin -->
+  <section class="breadcrumb-section set-bg" data-setbg="{% static 'core/img/breadcrumb.jpg' %}">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <div class="breadcrumb__text">
+            <h2>E commerce</h2>
+            <div class="breadcrumb__option">
+              <a href="{% url 'home' %}">Home</a>
+              <span>{{ query }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Breadcrumb Section End -->
+
+  <!-- Product Section Begin -->
+  <section class="product spad">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="row">
+            <div class="section-title product__discount__title">
+              <small><b>({{ products.count }} product{{ products.count|pluralize }} found)</b></small>
+            </div>
+            {% for product in products %}
+              <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="product__item">
+                  <a href="{% url 'product' product.id %}">
+                    <div class="product__item__pic set-bg" data-setbg="{{ product.image.url }}"></div>
+                    <div class="product__item__text">
+                      <h6>{{ product.title }}</h6>
+                      <h5>₹{{ product.price }}</h5>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Product Section End -->
+{% endblock %}

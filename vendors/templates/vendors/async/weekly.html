@@ -1,0 +1,42 @@
+{% load custom_filters %}
+
+<button class="btn text-success vendor-monthly-earnings">Monthly Earnings</button>
+<button class="btn btn-success">Weekly Earnings</button>
+<button class="btn text-success vendor-daily-earnings">Daily Earnings</button>
+<div class="row">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">S. No.</th>
+        <th scope="col">Week</th>
+        <th scope="col">Revenue</th>
+        <th scope="col">Platform Charge</th>
+        <th scope="col">Earning</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if earnings %}
+        {% for earning in earnings %}
+          <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+
+            <td>{{ earning.week|date:'d F' }}</td>
+            <td>₹ {{ earning.total_earnings }}</td>
+            <td>
+              ₹{% if earning.total_earnings > 100000 %}
+                10000
+              {% elif earning.total_earnings > 10000 %}
+                1000
+              {% elif earning.total_earnings > 1000 %}
+                100
+              {% else %}
+                No Charge
+              {% endif %}
+            </td>
+            <td>₹{{ earning.total_earnings|adjust_earnings }}</td>
+          </tr>
+        {% endfor %}
+      {% endif %}
+    </tbody>
+  </table>
+</div>

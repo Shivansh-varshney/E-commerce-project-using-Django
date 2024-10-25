@@ -1,0 +1,87 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+
+{% block title %}
+  Browse Category: {{ categoryname }}
+{% endblock %}
+
+{% block content %}
+  <!-- Breadcrumb Section Begin -->
+  <section class="breadcrumb-section set-bg" data-setbg="{% static 'core/img/breadcrumb.jpg' %}">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <div class="breadcrumb__text">
+            <h2>E commerce</h2>
+            <div class="breadcrumb__option">
+              <a href="{% url 'home' %}">Home</a>
+              <span>{{ categoryname }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Breadcrumb Section End -->
+
+  <!-- Product Section Begin -->
+  <section class="product spad">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-3 col-md-5">
+          <div class="sidebar">
+            <div class="sidebar__item">
+              <h4>Categories</h4>
+              <ul>
+                <li>
+                  <a href="{% url 'all_category_products' %}">Show All</a>
+                </li>
+                {% for category in categories %}
+                  <li>
+                    <a href="{% url 'category_products' category.id %}">{{ category.title }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-9 col-md-7">
+          <div class="product__discount">
+            <div class="section-title product__discount__title">
+              <h2>{{ categoryname }}</h2>
+              <small><b>({{ products.count }} Products found)</b></small>
+            </div>
+          </div>
+          <div class="row">
+            {% for product in products %}
+              <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="product__item">
+                  <div class="product__item__pic set-bg" data-setbg="{{ product.image.url }}">
+                    <ul class="product__item__pic__hover">
+                      <li class="text-danger" id="response-data-{{ product.id }}"></li>
+                      <li>
+                        <button class="btn button-add-to-cart" data-index="{{ product.id }}"><a><i class="fa fa-shopping-cart"></i></a></button>
+                      </li>
+                      <input type="hidden" value="1" id="product-quantity" />
+                      <input type="hidden" value="{{ product.id }}" class="product-id-{{ product.id }}" />
+                      <input type="hidden" value="{{ product.title }}" class="product-title-{{ product.id }}" />
+                      <input type="hidden" value="{{ product.image.url }}" class="product-image-{{ product.id }}" />
+                    </ul>
+                  </div>
+                  <div class="product__item__text">
+                    <a href="{% url 'product' product.id %}">
+                      <h6>{{ product.title }}</h6>
+                      <span class="text-dark">₹</span><span class="product-price-{{ product.id }} text-dark"><b>{{ product.price }}</b></span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Product Section End -->
+{% endblock %}

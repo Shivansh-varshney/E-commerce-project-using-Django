@@ -1,0 +1,150 @@
+{% extends 'vendors/base.html' %}
+
+{% load static %}
+
+{% block title %}
+  Vendor Profile
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="row my-3">
+      <div class="row">
+        <div class="col-sm-10">
+          <h3><b>Personal Details</b></h3>
+        </div>
+        <div class="col-sm-2">
+          <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#requestChangeModal">Request Change</button>
+          <div class="modal fade" id="requestChangeModal" tabindex="-1" aria-labelledby="requestChangeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-fullscreen">
+              <div class="modal-content">
+                <div class="modal-header text-bg-success">
+                  <h1 class="modal-title fs-4 text-white" id="requestChangeModalLabel">Request Change</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form action="{% url 'vendor_profile' %}" method="POST">
+                    {% csrf_token %}
+                    {% for field in form %}
+                      <div class="form-floating">
+                        {{ field }} <p class="text-danger">{{ field.errors }}</p>
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                      </div>
+                    {% endfor %}
+                    <div class="modal-footer">
+                      <button type="submit" class="btn btn-success btn-sm">Raise Request</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row my-3">
+        <div class="col-sm-3">
+          <img src="{{ personal.image.url }}" class="img-thumbnail rounder img-fluid border border-success border-2" width="auto" alt="" />
+        </div>
+        <div class="col-sm-3">
+          <ul class="list-group">
+            <li class="list-group-item border border-success border-2 mb-1">
+              <b>Vendor ID:</b> {{ personal.vendor_id }}
+            </li>
+            <li class="list-group-item border border-success border-2 mb-1">
+              <b>Vendor Name:</b> {{ personal.title }}
+            </li>
+            <li class="list-group-item border border-success border-2 mb-1">
+              <b>Email:</b> {{ request.user.email }}
+            </li>
+            <li class="list-group-item border border-success border-2 mb-1">
+              <b>Phone:</b> {{ request.user.phone }}
+            </li>
+          </ul>
+        </div>
+        <div class="col-sm-6">
+          <ul class="list-group">
+            <li class="list-group-item border border-success border-2">
+              <b>About</b>: {{ personal.description }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row my-3">
+      <h3><b>Bank Details</b></h3>
+      <div class="row my-3">
+        <div class="col-sm-6">
+          <ul class="list-group">
+            <li class="list-group-item border border-success border-2 my-1">
+              <b>Bank Name:</b> {{ bankdetails.bank_name }}
+            </li>
+            <li class="list-group-item border border-success border-2 my-1">
+              <b>Account Holder Name:</b> {{ bankdetails.account_holder_name }}
+            </li>
+            <li class="list-group-item border border-success border-2 my-1">
+              <b>Account Number:</b> {{ bankdetails.account_number }}
+            </li>
+            <li class="list-group-item border border-success border-2 my-1">
+              <b>Account Type:</b> {{ bankdetails.account_type }}
+            </li>
+            <li class="list-group-item border border-success border-2 my-1">
+              <b>Pan Number:</b> {{ bankdetails.pan_number }}
+            </li>
+          </ul>
+        </div>
+        <div class="col-sm-6">
+          <ul class="list-group">
+            <li class="list-group-item border border-success border-2 my-1">
+              <b>IFSC Code:</b> {{ bankdetails.ifsc }}
+            </li>
+            <li class="list-group-item border border-success border-2 my-1">
+              <b>Branch Address</b> {{ bankdetails.branch_address }}
+            </li>
+
+            <li class="list-group-item border border-success border-2 my-1">
+              <b>GST Number:</b> {{ bankdetails.gst_number }}
+            </li>
+            <li class="list-group-item border border-success border-2 my-1">
+              <b>Company Incorporation Number:</b> {{ bankdetails.cin }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row my-3">
+      <h3><b>Address Details</b></h3>
+      <div class="col-sm-6">
+        <ul class="list-group">
+          <li class="list-group-item border border-success border-2 my-1">
+            <b>Floor Number:</b> {{ address.floornumber }}
+          </li>
+          <li class="list-group-item border border-success border-2 my-1">
+            <b>Building:</b> {{ address.building }}
+          </li>
+          <li class="list-group-item border border-success border-2 my-1">
+            <b>Street:</b> {{ address.street }}
+          </li>
+          <li class="list-group-item border border-success border-2 my-1">
+            <b>City:</b> {{ address.city }}
+          </li>
+        </ul>
+      </div>
+      <div class="col-sm-6">
+        <ul class="list-group">
+          <li class="list-group-item border border-success border-2 my-1">
+            <b>District</b>: {{ address.district }}
+          </li>
+          <li class="list-group-item border border-success border-2 my-1">
+            <b>State:</b> {{ address.state }}
+          </li>
+          <li class="list-group-item border border-success border-2 my-1">
+            <b>Country:</b> {{ address.country }}
+          </li>
+          <li class="list-group-item border border-success border-2 my-1">
+            <b>Zipcode:</b> {{ address.zipcode }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,151 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+
+{% block title %}
+  Profile settings
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-2"></div>
+      <div class="col-sm-4">
+        {% if userform.non_field_errors %}
+          {% for error in userform.non_field_errors %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              {{ error }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endfor %}
+        {% endif %}
+        {% if passwordform.non_field_errors %}
+          {% for error in passwordform.non_field_errors %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              {{ error }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endfor %}
+        {% endif %}
+        {% if addressform.non_field_errors %}
+          {% for error in addressform.non_field_errors %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              {{ error }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endfor %}
+        {% endif %}
+        <h4 class="mb-3"><b>Profile</b></h4>
+        <form action="{% url 'profile' %}" method="POST">
+          {% csrf_token %}
+          {% for field in userform %}
+            <div class="form-floating">
+              {{ field }} <p class="text-danger">{{ field.errors }}</p>
+              <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            </div>
+          {% endfor %}
+          <button type="submit" class="btn btn-success mt-2 mb-5">Change Profile</button>
+          <button type="reset" class="btn btn-info mt-2 mb-5">Reset</button>
+          <!-- Button trigger modal -->
+          <button type="button" class="btn btn-primary mt-2 mb-5" data-bs-toggle="modal" data-bs-target="#passwordModal">Change Password</button>
+        </form>
+        <!-- Modal -->
+        <div class="modal fade" id="passwordModal" tabindex="-1" aria-labelledby="passwordModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="passwordModalLabel">Change Password</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form action="{% url 'password' %}" method="POST">
+                  {% csrf_token %}
+                  {% for field in passwordform %}
+                    <div class="form-floating">
+                      {{ field }}<p style="color:red">{{ field.errors|striptags }}</p>
+                      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    </div>
+                  {% endfor %}
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Back</button>
+                    <button type="submit" class="btn btn-success mt-2">Update</button>
+                    <button type="reset" class="btn btn-info mt-2">Reset</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6" id="addresslist">
+        <h4><b>Address Book</b></h4>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">No.</th>
+              <th scope="col">Address Name</th>
+              <th scope="col">Default</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for address in addresses %}
+              <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ address.addressname }}</td>
+                {% if address.status %}
+                  <td>
+                    <span class="text-success"><i class="fa-solid fa-check"></i></span>
+                  </td>
+                {% else %}
+                  <td>
+                    <span class="text-danger"><i class="fa-solid fa-xmark"></i></span>
+                  </td>
+                {% endif %}
+                <td>
+                  <a href="{% url 'edit_address' address.id %}"><button class="btn text-dark"><i class="fa-solid fa-pencil"></i></button></a>
+                  <button class="btn text-dark delete-address" data-index="{{ address.id }}"><i class="fa-solid fa-trash-can"></i></button>
+                  {% if not address.status %}
+                    <button class="btn btn-success btn-sm default-address" data-index="{{ address.id }}">Make Default</button>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+            <tr>
+              <td colspan="3"></td>
+              <td>
+                <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#addAddressModal">Add New Address</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="addAddressModalLabel">Add Address</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form action="{% url 'add_address' %}" method="POST">
+                {% csrf_token %}
+                {% for field in addressform %}
+                  <div class="form-floating">
+                    {{ field }}<p style="color:red">{{ field.errors|striptags }}</p>
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                  </div>
+                {% endfor %}
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Back</button>
+                  <button type="submit" class="btn btn-success mt-2">Save Address</button>
+                  <button type="reset" class="btn btn-info mt-2">Reset</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

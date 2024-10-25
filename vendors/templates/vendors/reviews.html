@@ -1,0 +1,41 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+
+{% block title %}
+  Vendor reviews
+{% endblock %}
+
+{% block content %}
+  <div class="container mt-5">
+    {% for review in page_obj %}
+      <div class="mb-2 border border-success border-2 pt-3 px-3">
+        <span>
+          <strong>
+            {{ review.user.first_name|title }}
+            {% for star in review.rating|ljust:review.rating %}
+              ⭐
+            {% endfor %}
+          </strong>
+        </span>
+        <p>
+          {{ review.review }} <br /><small class="text-danger">{{ review.date }}</small>
+        </p>
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="text-center">
+    <span class="step-links">
+      {% if page_obj.has_previous %}
+        <a class="text-dark" href="?page={{ page_obj.previous_page_number }}"><-previous</a>
+      {% endif %}
+
+      <span class="current">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</span>
+
+      {% if page_obj.has_next %}
+        <a class="text-dark" href="?page={{ page_obj.next_page_number }}">next-></a>
+      {% endif %}
+    </span>
+  </div>
+{% endblock %}
