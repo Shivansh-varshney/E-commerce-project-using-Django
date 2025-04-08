@@ -1,6 +1,7 @@
 from django.shortcuts import redirect
 from django.contrib import messages
 from userauths.forms import customerAddress
+from userauths.models import CustomerAddress
 
 
 def processor(request):
@@ -12,7 +13,7 @@ def processor(request):
             address.save()
 
             messages.success(request, 'Address Added successfully!!')
-            
+
             contact = {
                 'name': '',
                 'phone': '',
