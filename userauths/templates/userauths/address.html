@@ -1,0 +1,25 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+
+{% block title %}
+  Edit Address: {{ address.addressname }}
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-sm-3"></div>
+    <div class="col-sm-4">
+      <h4><b>Update Address</b></h4>
+      <form action="{% url 'edit_address' address.id %}" method="POST">
+        {% csrf_token %}
+        {% for field in form %}
+          {{ field }}
+        {% endfor %}
+        <a href="{% url 'profile' %}" class="btn btn-primary mt-3 mb-5">Back</a>
+        <button type="submit" class="btn btn-success mt-3 mb-5">Save changes</button>
+        <button type="reset" class="btn btn-info mt-3 mb-5">Reset</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}

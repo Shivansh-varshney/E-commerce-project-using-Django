@@ -1,0 +1,119 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+
+{% block title %}
+  Browse shop: {{ vendor.title }}
+{% endblock %}
+
+{% block content %}
+  <!-- Breadcrumb Section Begin -->
+  <section class="breadcrumb-section set-bg" data-setbg="{% static 'core/img/breadcrumb.jpg' %}">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <div class="breadcrumb__text">
+            <h2>E commerce</h2>
+            <div class="breadcrumb__option">
+              <a href="{% url 'home' %}">Home</a>
+              <a href="{% url 'shops' %}">Shops</a>
+              <span>{{ vendor.title }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Breadcrumb Section End -->
+
+  <!-- Product Section Begin -->
+  <section class="product spad">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 col-md-7">
+          <div class="row border border-warning m-3 p-5">
+            <div class="col-lg-6">
+              <img src="{{ vendor.image.url }}" alt="" />
+            </div>
+            <div class="col-lg-6">
+              <h3><b>{{ vendor.title }}</b> <span class="fs-6">{{ average }}</span></h3>
+              <div class="sidebar__item my-2">
+                <ul>
+                  <li>Owner Name: {{ vendor.user.first_name }} {{ vendor.user.last_name }}</li>
+                  <li>Support Phone: {{ vendor.user.phone }}</li>
+                  <li>Support Email: {{ vendor.user.email }}</li>
+                </ul>
+              </div>
+              <p>
+                <b>About:</b> {{ vendor.description }}
+              </p>
+              {% if reviewform %}
+                <div class="row">
+                  <div class="col-sm-6">
+                    <form action="{% url 'add_review' vendor.id %}" method="POST">
+                      {% csrf_token %}
+                      {% for field in reviewform %}
+                        <div class="form-floating mb-1">
+                          {{ field }}
+                          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        </div>
+                      {% endfor %}
+                      <button type="submit" class="btn btn-success btn-sm">Add</button>
+                    </form>
+                  </div>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-12 col-md-7">
+          <div class="row">
+            {% for product in products %}
+              <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="product__item">
+                  <div class="product__item__pic set-bg" data-setbg="{{ product.image.url }}">
+                    <ul class="product__item__pic__hover">
+                      <li class="text-danger" id="response-data-{{ product.id }}"></li>
+                      <li>
+                        <button class="btn button-add-to-cart" data-index="{{ product.id }}"><a><i class="fa fa-shopping-cart"></i></a></button>
+                      </li>
+                      <input type="hidden" value="1" id="product-quantity" />
+                      <input type="hidden" value="{{ product.id }}" class="product-id-{{ product.id }}" />
+                      <input type="hidden" value="{{ product.title }}" class="product-title-{{ product.id }}" />
+                      <input type="hidden" value="{{ product.image.url }}" class="product-image-{{ product.id }}" />
+                    </ul>
+                  </div>
+                  <div class="product__item__text">
+                    <a href="{% url 'product' product.id %}">
+                      <h6>{{ product.title }}</h6>
+                      <span class="text-dark">₹</span><span class="product-price-{{ product.id }} text-dark"><b>{{ product.price }}</b></span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+          {% if reviews %}
+            <div class="row">
+              <h4 class="mb-2"><b>Reviews</b></h4>
+              <div class="col-sm-12">
+                {% for review in reviews %}
+                  <div class="border border-success border-2 p-2 mb-2">
+                    {{ review.user.first_name|title }}
+                    {% for star in review.rating|ljust:review.rating %}
+                      ⭐
+                    {% endfor %}
+                    <p class="text-dark">{{ review.review }}</p>
+                    <small class="text-danger">{{ review.date }}</small>
+                  </div>
+                {% endfor %}
+              </div>
+              <strong><a class="text-dark" href="{% url 'vendor_review' vendor.id %}">See all reviews -></a></strong>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Product Section End -->
+{% endblock %}

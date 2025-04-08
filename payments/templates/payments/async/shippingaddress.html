@@ -1,0 +1,39 @@
+<div class="shipping-address">
+  <h5><b>Address</b></h5>
+  <p>
+    Current Address is for: {{ address.addressname }}
+    <a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#changeAddressModal">Change</a>
+  </p>
+  <div>
+    <div class="row mb-2">
+      <div class="col-sm-4">
+        <input type="text" class="form-control" name="housenumber" placeholder="House No." value="{{ address.housenumber }}" />
+      </div>
+      <div class="col-sm-4">
+        <input type="text" class="form-control" name="landmark" placeholder="Land Mark if any" value="{{ address.landmark }}" />
+      </div>
+      <div class="col-sm-4">
+        <input type="text" class="form-control" name="street" placeholder="Street" value="{{ address.street }}" />
+      </div>
+    </div>
+    <div class="row mb-2">
+      <div class="col-sm-4">
+        <input type="text" class="form-control" name="city" placeholder="city" value="{{ address.city }}" />
+      </div>
+      <div class="col-sm-4">
+        <input type="text" class="form-control" name="district" placeholder="District" value="{{ address.district }}" />
+      </div>
+      <div class="col-sm-4">
+        <input type="text" class="form-control" name="state" placeholder="state" value="{{ address.state }}" />
+      </div>
+    </div>
+    <div class="row mb-2">
+      <div class="col-sm-4">
+        <input type="text" class="form-control" name="country" placeholder="country" value="{{ address.country }}" />
+      </div>
+      <div class="col-sm-4">
+        <input type="text" class="form-control" name="zipcode" placeholder="zipcode" value="{{ address.zipcode }}" />
+      </div>
+    </div>
+  </div>
+</div>

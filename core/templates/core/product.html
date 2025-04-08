@@ -1,0 +1,287 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+
+{% block title %}
+  Buy: {{ product.title }}
+{% endblock %}
+
+{% block content %}
+  <!-- Breadcrumb Section Begin -->
+  <section class="breadcrumb-section set-bg" data-setbg="{% static 'core/img/breadcrumb.jpg' %}">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <div class="breadcrumb__text">
+            <h2>E commerce</h2>
+            <div class="breadcrumb__option">
+              <a href="{% url 'home' %}">Home</a>
+              <a href="{% url 'category_products' product.category.id %}">{{ product.category.title }}</a>
+              <span>{{ product.title }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Breadcrumb Section End -->
+
+  <!-- Product Details Section Begin -->
+  <section class="product-details spad">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 col-md-6">
+          <div class="product__details__pic">
+            <div class="product__details__pic__item">
+              <img class="product__details__pic__item--large" src="{{ product.image.url }}" alt="" />
+            </div>
+            <div class="latest-product spad">
+              <div class="latest-product__text">
+                <h4><b>Product Images</b></h4>
+                <div class="latest-product__slider owl-carousel mb-5">
+                  {% if images %}
+                    {% for image in images %}
+                      <div class="latest-prdouct__slider__item">
+                        <div class="latest-product__item__pic">
+                          <img src="{{ image.image.url }}" alt="product images" />
+                        </div>
+                        <span><b>{{ image.image_text }}</b></span>
+                      </div>
+                    {% endfor %}
+                  {% endif %}
+                  <div class="latest-prdouct__slider__item">
+                    <div class="latest-product__item__pic">
+                      <img src="{{ product.image.url }}" alt="product images" />
+                    </div>
+                    <span><b>{{ product.title }}</b></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6">
+          <div class="product__details__text">
+            <h3>{{ product.title }}</h3>
+            <div class="product__details__price">
+              ₹<span class="product-price-{{ product.id }}">{{ product.price }}</span>
+
+              {% if product.old_price %}
+                <h5 class="btn btn-light position-relative">
+                  <s>₹{{ product.old_price }}</s>
+                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">-{{ product.get_percentage }}%</span>
+                </h5>
+              {% endif %}
+            </div>
+            <div class="product__details__quantity">
+              <div class="quantity">
+                <div class="pro-qty">
+                  <input type="number" value="1" id="product-quantity" />
+                  <input type="hidden" value="{{ product.id }}" class="product-id-{{ product.id }}" />
+                  <input type="hidden" value="{{ product.title }}" class="product-title-{{ product.id }}" />
+                  <input type="hidden" value="{{ product.price }}" class="product-price-{{ product.id }}" />
+                  <input type="hidden" value="{{ product.image.url }}" class="product-price-{{ product.id }}" />
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-success button-add-to-cart" data-index="{{ product.id }}">ADD TO CART</button>
+            <span class="text-danger" id="response-data-{{ product.id }}"></span>
+            <ul>
+              <li>
+                <b>Availability</b>
+                {% if product.stock_quantity %}
+                  <span>In Stock</span>
+                  <i class="fa-regular fa-circle-check text-success"></i>
+                {% else %}
+                  <span>Out Of Stock</span>
+                {% endif %}
+              </li>
+              <li>
+                <b>Seller</b><a class="text-dark" href="{% url 'shopproducts' product.vendor.id %}">{{ product.vendor.title }}</a>
+              </li>
+              <li>
+                <b>Average rating</b>{{ stars }}
+              </li>
+              {% for field, value in fields.items %}
+                <li>
+                  <b>{{ field }}</b> {{ value }}
+                </li>
+              {% endfor %}
+              {% if product.tags.all %}
+                <li>
+                  <b>Tags</b>{% for tag in product.tags.all %}
+                    <a class="text-success" href="{% url 'tag' %}?tag={{ tag.name }}">#{{ tag.name }}</a>
+                  {% endfor %}
+                </li>
+              {% endif %}
+              <li>
+                <b>Share on</b>
+                <div class="share">
+                  <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank"><i class="fa-brands fa-facebook"></i></a>
+                  <a href="https://api.whatsapp.com/send?text={{ 'Check out this amazing product: '|add:product.title|add:' '|add:'at'|add:' '|add:request.build_absolute_uri|urlencode }}" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+                  <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}&text={{ product.title }}" target="_blank"><i class="fa-brands fa-twitter"></i></a>
+                  <a href="https://pinterest.com/pin/create/button/?url={{ request.build_absolute_uri }}&media={{ product.image.url }}&description={{ product.title }}" target="_blank"><i class="fa-brands fa-pinterest"></i></a>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-12 col-md-12">
+          <h4><b>Description:</b></h4>
+          <p>{{ product.description|linebreaksbr }}</p>
+          {% if product.specifications %}
+            <h4><b>Specifications:</b></h4>
+            <p>{{ product.specifications|linebreaksbr }}</p>
+          {% endif %}
+          <div class="text-center mb-5">
+            <img src="{{ product.image.url }}" alt="product images" />
+          </div>
+          {% if images %}
+            {% for image in images %}
+              <div class="text-center">
+                <img src="{{ image.image.url }}" alt="product images" />
+                {% if image.image_text %}
+                  <div class="mb-5">
+                    <b>{{ image.image_text }}</b>
+                  </div>
+                {% endif %}
+              </div>
+            {% endfor %}
+          {% endif %}
+        </div>
+        {% if form %}
+          <div class="col-lg-10">
+            <strong class="text-success" id="review-res"></strong>
+            <form class="hide-review-form" action="{% url 'ajax-add-review' product.id %}" method="POST" id="reviewform">
+              {% csrf_token %}
+              <p>{{ form.review }}{{ form.review.errors }}</p>
+              <p>{{ form.rating }}{{ form.rating.errors }}</p>
+              <button type="submit" class="btn btn-success">Add</button>
+            </form>
+          </div>
+        {% endif %}
+        <div class="col-lg-10">
+          <h4 class="mb-2"><b>Product Reviews</b></h4>
+          <div class="review-list">
+            {% for review in reviews %}
+              <div class="mb-2 border border-warning pt-3 px-3">
+                <span>
+                  <strong>
+                    {{ review.user.first_name|title }}
+                    {% for star in review.rating|ljust:review.rating %}
+                      ⭐
+                    {% endfor %}
+                  </strong>
+                </span>
+                <p>
+                  {{ review.review }} <br /><small class="text-danger">{{ review.date }}</small>
+                </p>
+              </div>
+            {% endfor %}
+          </div>
+          {% if reviews %}
+            <strong><a class="text-dark" href="{% url 'product_reviews' product.id %}">See all reviews -></a></strong>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Product Details Section End -->
+
+  {% if related %}
+    <!-- Related Product Section Begin -->
+    <section class="related-product">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="section-title related__product__title">
+              <h2>Related Product</h2>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          {% for product in related %}
+            <div class="col-lg-3 col-md-4 col-sm-6">
+              <div class="product__item">
+                <div class="product__item__pic set-bg" data-setbg="{{ product.image.url }}">
+                  <ul class="product__item__pic__hover">
+                    <li class="text-danger" id="response-data-{{ product.id }}"></li>
+                    <li>
+                      <button class="btn button-add-to-cart" title="Add to cart" data-index="{{ product.id }}"><a><i class="fa fa-shopping-cart"></i></a></button>
+                    </li>
+                    <input type="hidden" value="1" id="product-quantity" />
+                    <input type="hidden" value="{{ product.id }}" class="product-id-{{ product.id }}" />
+                    <input type="hidden" value="{{ product.title }}" class="product-title-{{ product.id }}" />
+                    <input type="hidden" value="{{ product.image.url }}" class="product-image-{{ product.id }}" />
+                  </ul>
+                </div>
+                <div class="product__item__text">
+                  <a href="{% url 'product' product.id %}">
+                    <h6><b>{{ product.title }}</b></h6>
+                    <span class="text-dark">₹</span><span class="product-price-{{ product.id }} text-dark"><b>{{ product.price }}</b></span>
+                    {% if product.old_price %}
+                      <h5 class="btn btn-light position-relative">
+                        <s>₹{{ product.old_price }}</s>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">-{{ product.get_percentage }}%</span>
+                      </h5>
+                    {% endif %}
+                  </a>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+    <!-- Related Product Section End -->
+  {% endif %}
+
+  {% if from_vendor %}
+    <!-- From the vendor Section Begin -->
+    <section class="related-product">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="section-title related__product__title">
+              <h2>From the Seller</h2>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          {% for product in from_vendor %}
+            <div class="col-lg-3 col-md-4 col-sm-6">
+              <div class="product__item">
+                <div class="product__item__pic set-bg" data-setbg="{{ product.image.url }}">
+                  <ul class="product__item__pic__hover">
+                    <li class="text-danger" id="response-data-{{ product.id }}"></li>
+                    <li>
+                      <button class="btn button-add-to-cart" title="Add to cart" data-index="{{ product.id }}"><a><i class="fa fa-shopping-cart"></i></a></button>
+                    </li>
+                    <input type="hidden" value="1" id="product-quantity" />
+                    <input type="hidden" value="{{ product.id }}" class="product-id-{{ product.id }}" />
+                    <input type="hidden" value="{{ product.title }}" class="product-title-{{ product.id }}" />
+                    <input type="hidden" value="{{ product.image.url }}" class="product-image-{{ product.id }}" />
+                  </ul>
+                </div>
+                <div class="product__item__text">
+                  <a href="{% url 'product' product.id %}">
+                    <h6><b>{{ product.title }}</b></h6>
+                    <span class="text-dark">₹</span><span class="product-price-{{ product.id }} text-dark"><b>{{ product.price }}</b></span>
+                    {% if product.old_price %}
+                      <h5 class="btn btn-light position-relative">
+                        <s>₹{{ product.old_price }}</s>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">-{{ product.get_percentage }}%</span>
+                      </h5>
+                    {% endif %}
+                  </a>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+    <!-- From the vendor Section End -->
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,174 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+
+{% block title %}
+  Checkout
+{% endblock %}
+
+{% block content %}
+  <!-- Breadcrumb Section Begin -->
+  <section class="breadcrumb-section set-bg" data-setbg="{% static 'core/img/breadcrumb.jpg' %}">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <div class="breadcrumb__text">
+            <h2>E commerce</h2>
+            <div class="breadcrumb__option">
+              <a href="{% url 'cart' %}">Cart</a>
+              <span>Checkout</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Breadcrumb Section End -->
+
+  <!-- Checkout Section Begin -->
+  <section class="checkout spad">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <h6><i class="fa-solid fa-tag"></i> Have a coupon? <a href="{% url 'cart' %}">Click here</a> to enter your code</h6>
+        </div>
+      </div>
+      <div class="checkout__form">
+        <h4>Billing Details</h4>
+        <button class="btn"><a href="{% url 'cart' %}" class="text-dark">Edit Cart<i class="fa fa-shopping-cart"></i></a></button>
+        <div class="row">
+          <div class="col-lg-1 col-md-6"></div>
+          <div class="col-lg-10 col-md-6">
+            <div class="checkout__order">
+              <h4>Your Order</h4>
+              <table class="table table-dark table-striped table-hover">
+                <thead class="text-right">
+                  <tr>
+                    <th scope="col">Item No.</th>
+                    <th scope="col">Product</th>
+                    <th scope="col">Price(per item)</th>
+                    <th></th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for prd_id, item in cart_data.items %}
+                    <tr>
+                      <td>{{ forloop.counter }}</td>
+                      <td>{{ item.title }}</td>
+                      <td>{{ item.price }}</td>
+                      <td>x</td>
+                      <td>{{ item.quantity }}</td>
+                      <td>
+                        {% widthratio item.price 1 item.quantity %}
+                      </td>
+                    </tr>
+                  {% endfor %}
+                  <tr class="table-success">
+                    <td colspan="5">
+                      <b>Total =</b>
+                    </td>
+                    <td class="table-active">
+                      <span>₹<span>{{ cart_total_amount }}</span></span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <h4 class="mb-2"><b>Shipping Details</b></h4>
+
+              {% if address %}
+                <form action="{% url 'payment_request' %}" method="POST">
+                  <input type="hidden" name="productinfo" value="{{ cart_name }}" />
+                  <input type="hidden" name="amount" value="{{ cart_total_amount }}" />
+
+                  <h5><b>Contact Details</b></h5>
+                  <div class="row mb-2">
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" name="firstname" placeholder="First Name" value="{{ request.user.first_name }}" />
+                    </div>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" name="lastname" placeholder="Last Name" value="{{ request.user.last_name }}" />
+                    </div>
+                  </div>
+                  <div class="row mb-2">
+                    <div class="col-sm-6">
+                      <input type="email" class="form-control" name="email" placeholder="Email" value="{{ request.user.email }}" />
+                    </div>
+                    <div class="col-sm-6">
+                      <input type="tel" class="form-control" name="phone" placeholder="Phone Number" value="{{ request.user.phone }}" />
+                    </div>
+                  </div>
+
+                  <div class="shipping-address">
+                    <h5><b>Address</b></h5>
+                    <p>
+                      Current Address is for: {{ address.addressname }}
+                      <a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#changeAddressModal">Change</a>
+                    </p>
+                    <div>
+                      <div class="row mb-2">
+                        <div class="col-sm-4">
+                          <input type="text" class="form-control" name="housenumber" placeholder="House No." value="{{ address.housenumber }}" />
+                        </div>
+                        <div class="col-sm-4">
+                          <input type="text" class="form-control" name="landmark" placeholder="Land Mark if any" value="{{ address.landmark }}" />
+                        </div>
+                        <div class="col-sm-4">
+                          <input type="text" class="form-control" name="street" placeholder="Street" value="{{ address.street }}" />
+                        </div>
+                      </div>
+                      <div class="row mb-2">
+                        <div class="col-sm-4">
+                          <input type="text" class="form-control" name="city" placeholder="city" value="{{ address.city }}" />
+                        </div>
+                        <div class="col-sm-4">
+                          <input type="text" class="form-control" name="district" placeholder="District" value="{{ address.district }}" />
+                        </div>
+                        <div class="col-sm-4">
+                          <input type="text" class="form-control" name="state" placeholder="state" value="{{ address.state }}" />
+                        </div>
+                      </div>
+                      <div class="row mb-2">
+                        <div class="col-sm-4">
+                          <input type="text" class="form-control" name="country" placeholder="country" value="{{ address.country }}" />
+                        </div>
+                        <div class="col-sm-4">
+                          <input type="text" class="form-control" name="zipcode" placeholder="zipcode" value="{{ address.zipcode }}" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <button type="submit" class="site-btn">PLACE ORDER</button>
+                </form>
+                <div class="modal fade" id="changeAddressModal" tabindex="-1" aria-labelledby="changeAddressModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="changeAddressModalLabel">Change Address</h1>
+                      </div>
+                      <div class="modal-body">
+                        {% for address in addresses %}
+                          <div class="m-3">
+                            Ship to: <a class="btn btn-light change-address" data-index="{{ address.id }}" data-bs-dismiss="modal">{{ address.addressname }}</a>
+                          </div>
+                        {% endfor %}
+                        <div class="mx-3">
+                          New: <a href="{% url 'profile' %}" class="btn btn-primary btn-sm">Add address</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% else %}
+                <p>You have not added any addresses yet!!</p>
+                <a href="{% url 'profile' %}" class="btn btn-success btn-sm">Add</a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Checkout Section End -->
+{% endblock %}

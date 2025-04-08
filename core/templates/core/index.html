@@ -1,0 +1,173 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+  Home
+{% endblock %}
+
+{% load static %}
+
+{% block content %}
+  <!-- Categories Section Begin -->
+  <section class="categories">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="section-title">
+            <h2>Categories</h2>
+          </div>
+        </div>
+        <div class="categories__slider owl-carousel">
+          {% for category in categories %}
+            <div class="col-lg-10 text-center">
+              <div class="categories__item set-bg" data-setbg="{{ category.image.url }}">
+                <h5><a href="{% url 'category_products' category.id %}">{{ category.title }}</a></h5>
+              </div>
+              <small><b>{{ category.product.count }} Product{{ category.product.count|pluralize }}</b></small>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Categories Section End -->
+
+  <!-- Featured Section Begin -->
+  <section class="featured spad">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="section-title">
+            <h2>Featured Product</h2>
+          </div>
+        </div>
+      </div>
+      <div class="row featured__filter">
+        {% for product in featured %}
+          <div class="col-lg-3 col-md-4 col-sm-6">
+            <div class="featured__item">
+              <div class="featured__item__pic set-bg" data-setbg="{{ product.image.url }}">
+                <ul class="featured__item__pic__hover">
+                  <li class="text-danger" id="response-data-{{ product.id }}"></li>
+                  <li>
+                    <button class="btn button-add-to-cart" title="Add to cart" data-index="{{ product.id }}"><a><i class="fa fa-shopping-cart"></i></a></button>
+                  </li>
+                  <input type="hidden" value="1" id="product-quantity" />
+                  <input type="hidden" value="{{ product.id }}" class="product-id-{{ product.id }}" />
+                  <input type="hidden" value="{{ product.title }}" class="product-title-{{ product.id }}" />
+                </ul>
+              </div>
+              <div class="featured__item__text">
+                <a href="{% url 'product' product.id %}">
+                  <h6><b>{{ product.title }}</b></h6>
+                  <span class="text-dark">₹</span><span class="product-price-{{ product.id }} text-dark"><b>{{ product.price }}</b></span>
+                  {% if product.old_price %}
+                    <h5 class="btn btn-light position-relative">
+                      <s>₹{{ product.old_price }}</s>
+                      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">-{{ product.get_percentage }}%</span>
+                    </h5>
+                  {% endif %}
+                </a>
+              </div>
+              <small><b>by: {{ product.vendor.title }}</b></small>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+  <!-- Featured Section End -->
+
+  <!-- Banner Begin -->
+  <div class="banner">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-6">
+          <div class="banner__pic">
+            <img src="{% static 'core/img/banner/banner-1.jpg' %}" alt="" />
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6">
+          <div class="banner__pic">
+            <img src="{% static 'core/img/banner/banner-2.jpg' %}" alt="" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Banner End -->
+
+  <!-- Latest Product Section Begin -->
+  <section class="latest-product spad">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 col-md-6">
+          <div class="latest-product__text">
+            <h4>Latest Products</h4>
+            <div class="latest-product__slider owl-carousel">
+              {% for latest in latests %}
+                <div class="latest-prdouct__slider__item">
+                  {% for product in latest.items %}
+                    <a href="{% url 'product' product.id %}" class="latest-product__item">
+                      <div class="latest-product__item__pic">
+                        <img src="{{ product.image.url }}" alt="" width="50" height="50" />
+                      </div>
+                      <div class="latest-product__item__text">
+                        <h6>{{ product.title }}</h6>
+                        <span>₹{{ product.price }}</span>
+                      </div>
+                    </a>
+                  {% endfor %}
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="latest-product__text">
+            <h4>Top Rated Products</h4>
+            <div class="latest-product__slider owl-carousel">
+              {% for products in topproducts %}
+                <div class="latest-prdouct__slider__item">
+                  {% for product in products.items %}
+                    <a href="{% url 'product' product.id %}" class="latest-product__item">
+                      <div class="latest-product__item__pic">
+                        <img src="{{ product.image.url }}" alt="" />
+                      </div>
+                      <div class="latest-product__item__text">
+                        <h6>{{ product.title }}</h6>
+                        <span>₹{{ product.price }}</span>
+                      </div>
+                    </a>
+                  {% endfor %}
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="latest-product__text">
+            <h4>Something Different</h4>
+            <div class="latest-product__slider owl-carousel">
+              {% for products in different %}
+                <div class="latest-prdouct__slider__item">
+                  {% for product in products.items %}
+                    <a href="#" class="latest-product__item">
+                      <div class="latest-product__item__pic">
+                        <img src="{{ product.image.url }}" alt="" />
+                      </div>
+                      <div class="latest-product__item__text">
+                        <h6>{{ product.title }}</h6>
+                        <span>₹{{ product.price }}</span>
+                      </div>
+                    </a>
+                  {% endfor %}
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Latest Product Section End -->
+{% endblock %}

@@ -1,0 +1,15 @@
+{% for review in reviews %}
+  <div class="mb-2 border border-success border-2 pt-3 px-3">
+    <span>
+      <strong>
+        {{ review.user.first_name|title }}
+        {% for star in review.rating|ljust:review.rating %}
+          ⭐
+        {% endfor %}
+      </strong>
+    </span>
+    <p>
+      {{ review.review }} <br /><small class="text-danger">{{ review.date }}</small>
+    </p>
+  </div>
+{% endfor %}

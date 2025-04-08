@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <title>Loading...</title>
+  </head>
+
+  <body onload="document.payuForm.submit()">
+    <form action="{{ posted.action }}" method="post" name="payuForm">
+      <input type="hidden" name="key" value="{{ posted.key }}" />
+      <input type="hidden" name="hash_string" value="{{ posted.hash_string }}" />
+      <input type="hidden" name="hash" value="{{ posted.hash }}" />
+      <input type="hidden" name="posted" value="{{ posted }}" />
+      <input type="hidden" name="txnid" value="{{ posted.txnid }}" />
+      <input type="hidden" name="amount" value="{{ posted.amount|default:'' }}" />
+      <input type="hidden" name="firstname" id="firstname" value="{{ posted.firstname|default:'' }}" />
+      <input type="hidden" name="email" id="email" value="{{ posted.email|default:'' }}" />
+      <input type="hidden" name="phone" value="{{ posted.phone|default:'' }}" />
+      <textarea type="hidden" name="productinfo" style="display:none;">{{ posted.productinfo|default:'' }}</textarea>
+
+      <input type="hidden" name="surl" value="{{ posted.surl }}" size="64" />
+      <input type="hidden" name="furl" value="{{ posted.furl }}" size="64" />
+      <input type="hidden" name="service_provider" value="{{ posted.service_provider }}" size="64" />
+      <input type="hidden" name="lastname" id="lastname" value="{{ posted.lastname }}" />
+      <input type="hidden" name="housenumber" value="{{ posted.housenumber }}" />
+      <input type="hidden" name="landmark" value="{{ posted.landmark }}" />
+      <input type="hidden" name="street" value="{{ posted.street }}" />
+      <input type="hidden" name="city" value="{{ posted.city }}" />
+      <input type="hidden" name="district" value="{{ posted.district }}" />
+      <input type="hidden" name="state" value="{{ posted.state }}" />
+      <input type="hidden" name="country" value="{{ posted.country }}" />
+      <input type="hidden" name="zipcode" value="{{ posted.zipcode }}" />
+      <input type="hidden" name="udf1" value="{{ posted.udf1 }}" />
+      <input type="hidden" name="udf2" value="{{ posted.udf2 }}" />
+      <input type="hidden" name="udf3" value="{{ posted.udf3 }}" />
+      <input type="hidden" name="udf4" value="{{ posted.udf4 }}" />
+      <input type="hidden" name="udf5" value="{{ posted.udf5 }}" />
+    </form>
+  </body>
+</html>
+

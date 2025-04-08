@@ -1,0 +1,49 @@
+{% extends 'vendors/base.html' %}
+
+{% load static %}
+
+{% block title %}
+  All Orders
+{% endblock %}
+
+{% block content %}
+  <div class="container-fluid">
+    <div class="row">
+      <h3><b>All Orders</b></h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">S. No.</th>
+            <th scope="col">Product</th>
+            <th scope="col">Price</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Product Id</th>
+            <th scope="col">Order Id</th>
+            <th scope="col">Order Status</th>
+            <th scope="col">Transaction ID</th>
+            <th scope="col">Order Date</th>
+            <th scope="col">Pickup Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order in orders %}
+            <tr>
+              <th scope="row">{{ forloop.counter }}</th>
+              <td>{{ order.product.title }}</td>
+              <td>₹{{ order.price }}</td>
+              <td>{{ order.qty }}</td>
+              <td>₹{{ order.total }}</td>
+              <td>{{ order.productid }}</td>
+              <td>{{ order.orderid }}</td>
+              <td>{{ order.status }}</td>
+              <td>{{ order.txnid }}</td>
+              <td>{{ order.date|date }}</td>
+              <td>{{ order.pickdate|date }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,6 @@
+migrations
+__pycache__
+media
+staticfiles
+environment
+.env

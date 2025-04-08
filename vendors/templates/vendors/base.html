@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zxx">
+  <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-W4TV4QK17Y"></script>
+    <script>
+      window.dataLayer = window.dataLayer || []
+      function gtag() {
+        dataLayer.push(arguments)
+      }
+      gtag('js', new Date())
+      
+      gtag('config', 'G-W4TV4QK17Y')
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Ogani Template" />
+    <meta name="keywords" content="Ogani, unica, creative, html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>
+      {% block title %}
+
+      {% endblock %}
+    </title>
+
+    {% load static %}
+    <!-- Icone link -->
+    <link rel="icon" href="{% static 'core/img/logo2.png' %}" />
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet" />
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="{% static 'core/css/bootstrap.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'core/css/all.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'core/css/owl.carousel.min.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'core/css/style.css' %}" type="text/css" />
+  </head>
+
+  <body>
+    <!-- Page Preloder -->
+    <div id="preloder">
+      <div class="loader"></div>
+    </div>
+
+    <header>
+      <div class="px-3 py-2 text-bg-success border-bottom">
+        <div class="container">
+          <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a href="/" class="d-flex col-sm-2 text-decoration-none"><img src="{% static 'core/img/logo.png' %}" alt="" /></a>
+
+            <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
+              <li>
+                <a href="{% url 'home' %}" class="nav-link text-white">
+                  <i class="fa-solid fa-house"></i>
+                  Home
+                </a>
+              </li>
+              {% if request.user.vendor %}
+              <li>
+                <a href="{% url 'vendor_home' %}" class="nav-link text-white">
+                  <i class="fa-solid fa-palette"></i>
+                  Dashboard
+                </a>
+              </li>
+              <li>
+                <a href="{% url 'vendor_orders' %}" class="nav-link text-white">
+                  <i class="fa-solid fa-list"></i>
+                  Orders
+                </a>
+              </li>
+              <li>
+                <a href="{% url 'show_products' %}" class="nav-link text-white">
+                  <i class="fa-solid fa-grip-vertical"></i>
+                  Products
+                </a>
+              </li>
+              <li>
+                <a href="{% url 'vendor_earnings' %}" class="nav-link text-white">
+                  <i class="fa-solid fa-coins"></i>
+                  Earnings
+                </a>
+              </li>
+              <li>
+                <a href="{% url 'vendor_profile' %}" class="nav-link text-white">
+                  <i class="fa-solid fa-user"></i>
+                  Vendor Profile
+                </a>
+              </li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-6 mt-2">
+          {% if messages %}
+            {% for message in messages %}
+              <div id="autoDismissAlert" class="alert alert-{{ message.tags }} alert-dismissible fade show text-center">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    {% block content %}
+
+    {% endblock %}
+
+    <!-- Js Plugins -->
+    <script src="{% static 'core/js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'core/js/jquery.js' %}"></script>
+    <script src="{% static 'core/js/all.js' %}"></script>
+    <script src="{% static 'core/js/bootstrap.js' %}"></script>
+    <script src="{% static 'core/js/jquery.slicknav.js' %}"></script>
+    <script src="{% static 'core/js/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'core/js/main.js' %}"></script>
+    <script src="{% static 'core/js/function.js' %}"></script>
+  </body>
+</html>

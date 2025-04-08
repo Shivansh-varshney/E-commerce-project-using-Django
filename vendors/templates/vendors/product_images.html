@@ -1,0 +1,82 @@
+{% extends 'vendors/base.html' %}
+
+{% load static %}
+
+{% block title %}
+  Edit Product Images
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h3><b>Thumbnail Image:</b></h3>
+    <div class="row">
+      <div class="col-sm-3">
+        <h5><b>{{ mainImage.title }}</b></h5>
+      </div>
+      <div class="col-sm-4">
+        <img src="{{ mainImage.image.url }}" height="200" width="auto" alt="" />
+      </div>
+      <div class="col-sm-3">
+        <form action="{% url 'product_images' mainImage.id %}" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          {% for field in thumbnailForm %}
+            <div class="form-floating">
+              {{ field }} <p class="text-danger">{{ field.errors }}</p>
+              <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            </div>
+          {% endfor %}
+          <button type="submit" class="btn btn-success btn-sm">Update</button>
+        </form>
+      </div>
+    </div>
+
+    {% if extraImages %}
+      <h3><b>Other Images:</b></h3>
+      {% for image in extraImages %}
+        <div class="row my-3">
+          <div class="col-sm-3">
+            <h5><b>{{ image.image_text }}</b></h5>
+          </div>
+          <div class="col-sm-4">
+            <img src="{{ image.image.url }}" height="200" width="auto" alt="" />
+          </div>
+          <div class="col-sm-3">
+            <form action="{% url 'update_images' image.id %}" method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+              {% for field in extraImagesForm %}
+                <div class="form-floating">
+                  {{ field }} <p class="text-danger">{{ field.errors }}</p>
+                  <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                </div>
+              {% endfor %}
+              <button type="submit" class="btn btn-success btn-sm mb-2">Update Image</button>
+            </form>
+            <form action="{% url 'delete_images' mainImage.id %}">
+              {% csrf_token %}
+              <input type="hidden" name="prd_id" value="{{ image.id }}" />
+              <button type="submit" class="btn btn-danger btn-sm">Delete Image</button>
+            </form>
+          </div>
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    <div class="row my-5">
+      <div class="col-sm-7">
+        <h3><b>Add New Image</b></h3>
+      </div>
+      <div class="col-sm-4">
+        <form action="{% url 'add_images' mainImage.id %}" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          {% for field in extraImagesForm %}
+            <div class="form-floating">
+              {{ field }} <p class="text-danger">{{ field.errors }}</p>
+              <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            </div>
+          {% endfor %}
+          <button type="submit" class="btn btn-success btn-sm">Add Image</button>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+  {{ message1|title }}
+{% endblock %}
+
+{% block content %}
+  <h1>{{ message2|title }}</h1>
+  <h2>Transaction ID: {{ txnid }}</h2>
+{% endblock %}

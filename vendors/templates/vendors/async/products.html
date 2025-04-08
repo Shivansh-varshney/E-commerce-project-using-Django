@@ -1,0 +1,37 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">S. No.</th>
+      <th scope="col">Product</th>
+      <th></th>
+      <th scope="col">Product Id</th>
+      <th scope="col">Stock Quantity</th>
+      <th scope="col">Product Status</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for product in products %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>
+          <div class="row">
+            <div class="col-sm-9">{{ product.title }}</div>
+            <div class="col-sm-3">
+              <img src="{{ product.image.url }}" height="50" alt="" />
+            </div>
+          </div>
+        </td>
+        <td></td>
+        <td>{{ product.pid }}</td>
+        <td>{{ product.stock_quantity }}</td>
+        <td>{{ product.product_status }}</td>
+        <td>
+          <a href="{% url 'edit_product' product.id %}" class="text-warning"><button class="btn btn-sm"><i class="fa-solid fa-pencil"></i></button></a>
+          <button class="btn btn-sm delete-vendor-product text-danger" data-prd-id="{{ product.id }}"><i class="fa-solid fa-trash"></i></button>
+          <a href="{% url 'product_images' product.id %}"><button class="btn btn-warning btn-sm">Edit Images</button></a>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>

@@ -1,0 +1,26 @@
+{% extends 'vendors/base.html' %}
+
+{% load static %}
+
+{% block title %}
+  Update Product: {{ product.title }}
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <form action="{% url 'edit_product' product.id %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for field in form %}
+          <div class="form-floating">
+            {{ field }} <p class="text-danger">{{ field.errors }}</p>
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          </div>
+        {% endfor %}
+        <div class="text-right">
+          <button class="btn btn-success my-3">Update</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+
+{% block title %}
+  Order Details
+{% endblock %}
+
+{% block content %}
+  <!-- Breadcrumb Section Begin -->
+  <section class="breadcrumb-section set-bg" data-setbg="{% static 'core/img/breadcrumb.jpg' %}">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <div class="breadcrumb__text">
+            <h2>E commerce</h2>
+            <div class="breadcrumb__option">
+              <a href="{% url 'home' %}">Home</a>
+              <span>Orders</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Breadcrumb Section End -->
+
+  <div class="container">
+    <div class="row m-3">
+      <div class="col-sm-4">
+        <ul style="list-style-type: none;">
+          <li>
+            <b>Transaction Id:</b> <span class="text-danger">{{ order.txnid }}</span>
+          </li>
+          <li>Amount: ₹{{ order.price }}</li>
+          <li>Ordered On: {{ order.date }}</li>
+          <li>
+            Paid Status:{% if order.paid_status %}
+              <td>
+                <span class="text-success"><i class="fa-solid fa-check text-success"></i></span>
+              </td>
+            {% else %}
+              <i class="fa-solid fa-xmark text-danger"></i>
+            {% endif %}
+          </li>
+        </ul>
+      </div>
+      <div class="col-sm-4">
+        <b>To be delivered to:</b> <span class="text-danger">{{ order.address.addressname }}</span>
+        <ul style="list-style-type: none;">
+          <li>House No: {{ order.address.housenumber }}, {{ order.address.street }},</li>
+          <li>{{ order.address.city }}-{{ order.address.zipcode }}, {{ order.address.district }}</li>
+          <li>{{ order.address.state }}, {{ order.address.country }}</li>
+        </ul>
+      </div>
+      <div class="col-sm-4">
+        <b>Contact details:</b> <span class="text-danger">{{ order.name }}</span>
+        <ul style="list-style-type: none;">
+          <li>Phone No: {{ order.phone }}</li>
+          <li>Email: {{ order.email }}</li>
+        </ul>
+      </div>
+    </div>
+    <div class="row">
+      {% for item in items %}
+        <div class="row border border-success border-3 p-3 mb-3 m-1">
+          <div class="col-sm-1"></div>
+          <div class="col-sm-2 border-end border-bottom border-success border-2">
+            <img src="{{ item.product.image.url }}" alt="" />
+          </div>
+          <div class="col-sm-4"></div>
+          <div class="col-sm-4">
+            <a href="{% url 'product' item.product.id %}" title="click to view" class="text-dark fs-4">Product: <b>{{ item.product.title }}</b></a>
+            <div class="fs-5">
+              Price: <b>{{ item.price }}</b>
+            </div>
+            <div class="fs-5">
+              Quantity: <b>{{ item.qty }}</b>
+            </div>
+            <div class="fs-5">
+              Total: <b>{{ item.total }}</b>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

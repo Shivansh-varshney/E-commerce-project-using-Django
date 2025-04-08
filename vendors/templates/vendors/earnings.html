@@ -1,0 +1,98 @@
+{% extends 'vendors/base.html' %}
+
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}
+  Earnings
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-4">
+        <h3><b>Earnings</b></h3>
+      </div>
+
+      <div class="col-sm-3">
+        <ul class="list-group border border-success border-2">
+          <li class="list-group-item text-success">All time revenue: ₹ {{ revenue }}</li>
+        </ul>
+      </div>
+      <div class="col-sm-3">
+        <ul class="list-group border border-success border-2">
+          <li class="list-group-item text-success">Revenue Per Month: ₹ {{ average }}</li>
+        </ul>
+      </div>
+      <div class="col-sm-2">
+        <button class="btn text-success active border-2" data-bs-toggle="modal" data-bs-target="#payoutModal">Ask Payout</button>
+        <div class="modal fade" id="payoutModal" tabindex="-1" aria-labelledby="payoutModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+              <div class="modal-header text-bg-success">
+                <h1 class="modal-title fs-4 text-white" id="payoutModalLabel">send request</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form action="{% url 'payout' %}" method="POST">
+                  {% csrf_token %}
+                  <div class="form-floating">
+                    <input type="text" name="amount" class="form-control" required id="amount" placeholder="Enter Amount" />
+                    <label for="amount">Amount</label>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="submit" class="btn btn-success btn-sm">send</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <br />
+    <div class="earnings">
+      <button class="btn btn-success">Monthly Earnings</button>
+      <button class="btn text-success vendor-weekly-earnings">Weekly Earnings</button>
+      <button class="btn text-success vendor-daily-earnings">Daily Earnings</button>
+      <div class="row">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">S. No.</th>
+              <th scope="col">Month</th>
+              <th scope="col">Revenue</th>
+              <th scope="col">Platform Charge</th>
+              <th scope="col">Earning</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% if earnings %}
+              {% for earning in earnings %}
+                <tr>
+                  <th scope="row">{{ forloop.counter }}</th>
+
+                  <td>{{ earning.month|date:'F Y' }}</td>
+                  <td>₹ {{ earning.total_earnings }}</td>
+                  <td>
+                    ₹{% if earning.total_earnings > 100000 %}
+                      10000
+                    {% elif earning.total_earnings > 10000 %}
+                      1000
+                    {% elif earning.total_earnings > 1000 %}
+                      100
+                    {% else %}
+                      No Charge
+                    {% endif %}
+                  </td>
+                  <td>₹{{ earning.total_earnings|adjust_earnings }}</td>
+                </tr>
+              {% endfor %}
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}

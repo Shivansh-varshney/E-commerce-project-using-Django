@@ -1,0 +1,58 @@
+{% extends 'vendors/base.html' %}
+
+{% load static %}
+
+{% block title %}
+  Vendor Registration
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-3 offset-2">
+        <h4 class="text-success mb-3"><b>Vendor Registration</b></h4>
+      </div>
+      <h4></h4>
+      <div class="col-sm-3"></div>
+      <div class="col-sm-6">
+        {% if step == 'register' %}
+          <form action="{% url 'register' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for field in form %}
+              <div class="form-floating">
+                {{ field }} <p style="color:red">{{ field.errors|striptags }}</p>
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+              </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-success mb-3">Next</button>
+            <button type="reset" class="btn btn-info mb-3">Reset</button>
+          </form>
+        {% elif step == 'bankdetails' %}
+          <form action="{% url 'bankdetails' vnd_id %}" method="POST">
+            {% csrf_token %}
+            {% for field in form %}
+              <div class="form-floating">
+                {{ field }} <p style="color:red">{{ field.errors|striptags }}</p>
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+              </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-success mb-3">Next</button>
+            <button type="reset" class="btn btn-info mb-3">Reset</button>
+          </form>
+        {% elif step == 'address' %}
+          <form action="{% url 'address' vnd_id %}" method="POST">
+            {% csrf_token %}
+            {% for field in form %}
+              <div class="form-floating">
+                {{ field }} <p style="color:red">{{ field.errors|striptags }}</p>
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+              </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-success mb-3">Next</button>
+            <button type="reset" class="btn btn-info mb-3">Reset</button>
+          </form>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}
